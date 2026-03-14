@@ -16,32 +16,26 @@ func main() {
 	defer listener.Close()
 	fmt.Println("raw stream inspector listening on 127.0.0.1:8080...")
 
-	//wait for single client to connect
-	conn, err := listener.Accept()
-	if err != nil {
-		fmt.Println("error accepting connection:", err)
-		os.Exit(1)
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			fmt.Println("error accepting connection:", err)
+			continue
+		}
+
+		go handleConnection(conn)
 	}
-	// valid HTTP response requires a Status Line, Headers, a blank line, and a Body.
-	response := "HTTP/1.1 200 OK\r\n" +
-		"Content-Type: text/plain\r\n" +
-		"Content-Length: 21\r\n" +
-		"Connection: close\r\n" +
-		"\r\n" + // separates headers from the body
-		"Hello from raw bytes!"
 
-	conn.Write([]byte(response))
+}
 
+func handleConnection(conn net.Conn) {
 	defer conn.Close()
-	fmt.Println("Client connected from:", conn.RemoteAddr())
 
-	buffer := make([]byte, 1024)
-	n, err := conn.Read(buffer)
-	if err != nil {
-		fmt.Println("Error reading from stream:", err)
-		return
-	}
-	fmt.Println("--- RAW BYTES RECEIVED ---")
-	fmt.Print(string(buffer[:n]))
-	fmt.Println("--------------------------")
+	clientAddress := conn.RemoteAddr().String()
+	fmt.Println("accepted connection from:", clientAddress)
+
+	greeting := "welcome to the tcp server \r\n"
+	conn.Write([]byte(greeting))
+
+	fmt.Println("Closing connection from:", clientAddress)
 }
