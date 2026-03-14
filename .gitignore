@@ -1,0 +1,52 @@
+# Binaries for programs
+*.exe
+*.darwin-amd64
+*.darwin-arm64
+*.dragonfly-amd64
+*.freebsd-amd64
+*.freebsd-arm64
+*.linux-amd64
+*.linux-arm64
+*.linux-s390x
+*.linux-mips64
+*.linux-mips64le
+*.netbsd-amd64
+*.netbsd-arm64
+*.openbsd-amd64
+*.openbsd-arm64
+*.plan9-amd64
+*.plan9-arm64
+*.solaris-amd64
+*.windows-amd64
+*.windows-arm64
+
+# Package files
+*.o
+*.cgo1.go
+*.cgo2.c
+*.wasm.mangled.a
+*.syso
+
+# External libraries (if using vendoring)
+# The "vendor/" directory is not included by default in the Go.gitignore
+# template because vendored content should be versioned if it's
+# part of the project's dependencies.
+# If you decide to ignore it, uncomment the following line:
+# vendor/
+
+# Test binary
+*.[test]
+
+# Output of coverage run
+*.out
+
+# Go workspace file
+go.work.lock
+
+# IDE/editor-specific files (add as needed)
+.idea/         # JetBrains IDEs (GoLand, IntelliJ)
+.vscode/       # VS Code
+*.sublime-project
+*.sublime-workspace
+.DS_Store      # macOS
+Thumbs.db      # Windows
