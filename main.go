@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -30,12 +32,26 @@ func main() {
 
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
+	fmt.Println("New connection from:", conn.RemoteAddr().String())
 
-	clientAddress := conn.RemoteAddr().String()
-	fmt.Println("accepted connection from:", clientAddress)
+	reader := bufio.NewReader(conn)
 
-	greeting := "welcome to the tcp server \r\n"
-	conn.Write([]byte(greeting))
+	for {
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("error reading from client", err)
+			return
+		}
 
-	fmt.Println("Closing connection from:", clientAddress)
+		fmt.Print("read line:", line)
+
+		if strings.TrimSpace(line) == "" {
+			fmt.Println("---- end of http headers ----")
+			break
+		}
+	}
+
+	response := "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, World!"
+	conn.Write([]byte(response))
+
 }
